@@ -1,0 +1,152 @@
+
+%%% Preamble Requirements %%%
+% \usepackage{geometry}
+% \usepackage{amsfonts}
+% \usepackage{amsmath}
+% \usepackage{amssymb}
+% \usepackage{tikz}
+
+% Optional packages such as sfmath set through python interface
+% \usepackage{sfmath}
+
+% \usetikzlibrary{arrows,chains,positioning,scopes,shapes.geometric,shapes.misc,shadows}
+
+%%% End Preamble Requirements %%%
+
+\input{"C:/Users/Darshan/anaconda3/envs/xdsm/lib/site-packages/pyxdsm/diagram_styles"}
+\begin{tikzpicture}
+
+\matrix[MatrixSetup]{
+%Row 0
+&
+\node [DataIO] (output_aero) {$\Vec{x}, \Vec{u}$};&
+\node [DataIO] (output_prop) {$\Vec{x}, \Vec{u}$};&
+\node [DataIO] (output_struc) {$\begin{array}{c}\text{Thicknesses} \\ \text{Material}\end{array}$};&
+\node [DataIO] (output_iner_loads) {$\Vec{x}$};&
+\node [DataIO] (output_eom) {$\Vec{x}, \Vec{u}$};&
+&
+\node [DataIO] (output_noise) {$\Vec{u}$};&
+\\
+%Row 1
+\node [DataIO] (left_output_aero) {$\vec{f}_{a}, \vec{m}_{a}$};&
+\node [MDA] (aero) {$\text{Aerodynamics}$};&
+&
+\node [DataInter] (aero-struc) {$\vec{f}_{a}, \vec{m}_{a}$};&
+&
+\node [DataInter] (aero-eom) {$\begin{array}{c}\vec{F}_{a}, \vec{M}_{a} \\  \frac{\partial \vec{F}_{a}}{\partial \vec{x}} \& \frac{\partial \vec{M}_{a}}{\partial \vec{x}}\end{array}$};&
+&
+&
+\\
+%Row 2
+\node [DataIO] (left_output_prop) {$\vec{F}_{p_{n_p}}, \vec{M}_{p_{n_p}}$};&
+\node [DataInter] (prop-aero) {$\text{Wake}$};&
+\node [MDA] (prop) {$\text{Propulsion}$};&
+\node [DataInter] (prop-struc) {$\vec{F}_{p_{n_p}}, \vec{M}_{p_{n_p}}$};&
+&
+\node [DataInter] (prop-eom) {$\begin{array}{c}\vec{F}_{p}, \vec{M}_{p} \\  \frac{\partial \vec{F}_{p}}{\partial \vec{x}} \& \frac{\partial \vec{M}_{p}}{\partial \vec{x}}\end{array}$};&
+&
+\node [DataInter] (prop-noise) {$T, \tau$};&
+\\
+%Row 3
+&
+\node [DataInter] (struc-aero) {$\text{Deflection}$};&
+\node [DataInter] (struc-prop) {$\text{Deflection}$};&
+\node [MDA] (struc) {$\text{Structural Dynamics}$};&
+&
+&
+&
+&
+\\
+%Row 4
+&
+&
+&
+&
+\node [MDA] (iner_loads) {$\text{Inertial Loads}$};&
+\node [DataInter] (iner_loads-eom) {$\begin{array}{c}\vec{F}_{g}, \vec{M}_{g} \\  \frac{\partial \vec{F}_{g}}{\partial \vec{x}} \& \frac{\partial \vec{M}_{g}}{\partial \vec{x}}\end{array}$};&
+&
+&
+\\
+%Row 5
+\node [DataIO] (left_output_eom) {${r_{eom}}$};&
+&
+&
+&
+&
+\node [ImplicitFunction] (eom) {$\text{EoM}$};&
+\node [DataInter] (eom-stab) {$A, B$};&
+&
+\\
+%Row 6
+\node [DataIO] (left_output_stab) {$\text{Handling qualities}$};&
+&
+&
+&
+&
+&
+\node [Function] (stab) {$\text{Stability}$};&
+&
+\\
+%Row 7
+\node [DataIO] (left_output_noise) {$\text{Noise maps}$};&
+&
+&
+&
+&
+&
+&
+\node [ImplicitFunction] (noise) {$\text{Acoustics}$};&
+\\
+%Row 8
+&
+&
+&
+&
+&
+&
+&
+&
+\\
+};
+
+% XDSM process chains
+
+
+\begin{pgfonlayer}{data}
+\path
+% Horizontal edges
+(aero) edge [DataLine] (aero-eom)
+(aero) edge [DataLine] (aero-struc)
+(prop) edge [DataLine] (prop-aero)
+(prop) edge [DataLine] (prop-struc)
+(prop) edge [DataLine] (prop-eom)
+(prop) edge [DataLine] (prop-noise)
+(struc) edge [DataLine] (struc-aero)
+(struc) edge [DataLine] (struc-prop)
+(iner_loads) edge [DataLine] (iner_loads-eom)
+(eom) edge [DataLine] (eom-stab)
+(aero) edge [DataLine] (left_output_aero)
+(prop) edge [DataLine] (left_output_prop)
+(eom) edge [DataLine] (left_output_eom)
+(stab) edge [DataLine] (left_output_stab)
+(noise) edge [DataLine] (left_output_noise)
+% Vertical edges
+(aero-eom) edge [DataLine] (eom)
+(aero-struc) edge [DataLine] (struc)
+(prop-aero) edge [DataLine] (aero)
+(prop-struc) edge [DataLine] (struc)
+(prop-eom) edge [DataLine] (eom)
+(prop-noise) edge [DataLine] (noise)
+(struc-aero) edge [DataLine] (aero)
+(struc-prop) edge [DataLine] (prop)
+(iner_loads-eom) edge [DataLine] (eom)
+(eom-stab) edge [DataLine] (stab)
+(aero) edge [DataLine] (output_aero)
+(prop) edge [DataLine] (output_prop)
+(struc) edge [DataLine] (output_struc)
+(iner_loads) edge [DataLine] (output_iner_loads)
+(eom) edge [DataLine] (output_eom)
+(noise) edge [DataLine] (output_noise);
+\end{pgfonlayer}
+
+\end{tikzpicture}
