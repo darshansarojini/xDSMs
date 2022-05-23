@@ -19,13 +19,13 @@
 \matrix[MatrixSetup]{
 %Row 0
 &
-\node [DataIO] (output_aero) {$\Vec{x}, \Vec{u}$};&
-\node [DataIO] (output_prop) {$\Vec{x}, \Vec{u}$};&
+\node [DataIO] (output_aero) {$\begin{array}{c}\Vec{x}, \Vec{u} \\ \text{Geometry DVs}\end{array}$};&
+\node [DataIO] (output_prop) {$\begin{array}{c}\Vec{x}, \Vec{u} \\ \text{Geometry DVs}\end{array}$};&
 \node [DataIO] (output_struc) {$\begin{array}{c}\text{Thicknesses} \\ \text{Material}\end{array}$};&
 \node [DataIO] (output_iner_loads) {$\Vec{x}$};&
 \node [DataIO] (output_eom) {$\Vec{x}, \Vec{u}$};&
 &
-\node [DataIO] (output_noise) {$\Vec{u}$};&
+\node [DataIO] (output_noise) {$\begin{array}{c}\Vec{u} \\ \text{Geometry DVs}\end{array}$};&
 \\
 %Row 1
 \node [DataIO] (left_output_aero) {$\vec{f}_{a}, \vec{m}_{a}$};&

@@ -1,0 +1,72 @@
+
+%%% Preamble Requirements %%%
+% \usepackage{geometry}
+% \usepackage{amsfonts}
+% \usepackage{amsmath}
+% \usepackage{amssymb}
+% \usepackage{tikz}
+
+% Optional packages such as sfmath set through python interface
+% \usepackage{sfmath}
+
+% \usetikzlibrary{arrows,chains,positioning,scopes,shapes.geometric,shapes.misc,shadows}
+
+%%% End Preamble Requirements %%%
+
+\input{"C:/Users/Darshan/anaconda3/envs/xdsm/lib/site-packages/pyxdsm/diagram_styles"}
+\begin{tikzpicture}
+
+\matrix[MatrixSetup]{
+%Row 0
+&
+\node [DataIO] (output_motor_sizing) {$\begin{array}{c}\text{Maximum thrust} \\ \text{Cruise RPM} \\ \text{Rotor diameter}\end{array}$};&
+\node [DataIO,stack] (output_motor_analy) {$\begin{array}{c}\text{Segment torque} \\ \text{Segment RPM}\end{array}$};&
+\node [DataIO,stack] (output_batt_analy) {$\begin{array}{c}\text{Segment time} \\ \text{Number of cells}\end{array}$};&
+\\
+%Row 1
+\node [DataIO] (left_output_motor_sizing) {$\text{Motor weight}$};&
+\node [SubOptimization] (motor_sizing) {$\begin{array}{c}\text{Motor} \\ \text{Sizing}\end{array}$};&
+\node [DataInter] (motor_sizing-motor_analy) {$\begin{array}{c}\text{Motor length} \\ \text{Motor diameter}\end{array}$};&
+&
+\\
+%Row 2
+&
+&
+\node [ImplicitFunction,stack] (motor_analy) {$\begin{array}{c}\text{Motor} \\ \text{Analysis}\end{array}$};&
+\node [DataInter,stack] (motor_analy-batt_analy) {$\text{Power}$};&
+\\
+%Row 3
+\node [DataIO] (left_output_batt_analy) {$\begin{array}{c}\text{SoC} \\ \text{Battery weight}\end{array}$};&
+&
+\node [DataInter] (batt_analy-motor_analy) {$\text{Voltage}$};&
+\node [ImplicitFunction] (batt_analy) {$\begin{array}{c}\text{Battery} \\ \text{Analysis}\end{array}$};&
+\\
+%Row 4
+&
+&
+&
+&
+\\
+};
+
+% XDSM process chains
+
+
+\begin{pgfonlayer}{data}
+\path
+% Horizontal edges
+(motor_sizing) edge [DataLine] (motor_sizing-motor_analy)
+(motor_analy) edge [DataLine] (motor_analy-batt_analy)
+(batt_analy) edge [DataLine] (batt_analy-motor_analy)
+(batt_analy) edge [DataLine] (left_output_batt_analy)
+(motor_sizing) edge [DataLine] (left_output_motor_sizing)
+% Vertical edges
+(motor_sizing-motor_analy) edge [DataLine] (motor_analy)
+(motor_analy-batt_analy) edge [DataLine] (batt_analy)
+(batt_analy-motor_analy) edge [DataLine] (motor_analy)
+(motor_sizing) edge [DataLine] (output_motor_sizing)
+(motor_analy) edge [DataLine] (output_motor_analy)
+(batt_analy) edge [DataLine] (output_batt_analy);
+\end{pgfonlayer}
+
+\end{tikzpicture}
