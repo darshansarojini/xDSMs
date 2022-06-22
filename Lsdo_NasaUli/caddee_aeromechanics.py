@@ -15,6 +15,9 @@ from pyxdsm.XDSM import (
 
 x = XDSM()
 
+x.add_system("opt", OPT, r"\text{Optimizer}")
+x.add_system("dummy1", GROUP, r"\text{...}")
+x.add_system("weight", SUBOPT, (r"\text{Aircraft Mass}", r"\text{Properties Estimation}"))
 x.add_system("aero", SOLVER, r"\text{Aerodynamics}")
 x.add_system("prop", SOLVER, r"\text{Propulsion}")
 x.add_system("struc", SOLVER, r"\text{Structural Dynamics}")
@@ -22,13 +25,16 @@ x.add_system("iner_loads", SOLVER, r"\text{Inertial Loads}")
 x.add_system("eom", IFUNC, r"\text{EoM}")
 x.add_system("stab", FUNC, r"\text{Stability}")
 x.add_system("noise", IFUNC, r"\text{Acoustics}")
+x.add_system("dummy2", GROUP, r"\text{...}")
 
-x.add_input("aero", (r'\Vec{x}, \Vec{u}', r'\text{Geometry DVs}'))
-x.add_input("prop", (r'\Vec{x}, \Vec{u}', r'\text{Geometry DVs}'))
-x.add_input("struc",  (r'\text{Thicknesses}', r'\text{Material}'))
-x.add_input("iner_loads", r'\Vec{x}')
-x.add_input("eom", r'\Vec{x}, \Vec{u}')
-x.add_input("noise", (r'\Vec{u}', r'\text{Geometry DVs}'))
+x.connect("opt", "aero", (r'\Vec{x}, \Vec{u}', r'\text{Geometry DVs}'))
+x.connect("opt", "prop", (r'\Vec{x}, \Vec{u}', r'\text{Geometry DVs}'))
+x.connect("opt", "struc",  (r'\text{Thicknesses}', r'\text{Material}'))
+x.connect("opt", "iner_loads", r'\Vec{x}')
+x.connect("opt", "eom", r'\Vec{x}, \Vec{u}')
+x.connect("opt", "noise", (r'\Vec{u}', r'\text{Geometry DVs}'))
+
+x.connect("weight", "iner_loads", r'\text{ A/C MP}')
 
 x.add_output("aero", r'\vec{f}_{a}, \vec{m}_{a}')
 x.add_output("prop", r'\vec{F}_{p_{n_p}}, \vec{M}_{p_{n_p}}')

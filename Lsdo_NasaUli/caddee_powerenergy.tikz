@@ -19,29 +19,109 @@
 \matrix[MatrixSetup]{
 %Row 0
 &
-\node [DataIO] (output_motor_sizing) {$\begin{array}{c}\text{Maximum thrust} \\ \text{Cruise RPM} \\ \text{Rotor diameter}\end{array}$};&
-\node [DataIO,stack] (output_motor_analy) {$\begin{array}{c}\text{Segment torque} \\ \text{Segment RPM}\end{array}$};&
-\node [DataIO,stack] (output_batt_analy) {$\begin{array}{c}\text{Segment time} \\ \text{Number of cells}\end{array}$};&
+\node [Optimization] (opt) {$\text{Optimizer}$};&
+&
+&
+&
+&
+&
+&
+&
 \\
 %Row 1
-\node [DataIO] (left_output_motor_sizing) {$\text{Motor weight}$};&
-\node [SubOptimization] (motor_sizing) {$\begin{array}{c}\text{Motor} \\ \text{Sizing}\end{array}$};&
-\node [DataInter] (motor_sizing-motor_analy) {$\begin{array}{c}\text{Motor length} \\ \text{Motor diameter}\end{array}$};&
+&
+&
+\node [Group] (dummy4) {$\text{....}$};&
+&
+&
+&
+&
+&
 &
 \\
 %Row 2
 &
 &
+&
+\node [Group] (sizing) {$\text{Sizing}$};&
+&
+&
+&
+\node [DataInter] (sizing-motor_analy) {$\begin{array}{c}\text{Motor length} \\ \text{Motor diameter}\end{array}$};&
+\node [DataInter] (sizing-batt_analy) {$\text{Battery}$};&
+\\
+%Row 3
+&
+&
+&
+&
+\node [Group] (dummy2) {$\text{....}$};&
+&
+&
+&
+&
+\\
+%Row 4
+&
+&
+&
+&
+&
+\node [ImplicitGroup,stack] (ms_am) {$\begin{array}{c}\text{Mission Segment} \\ \text{ Aeromechanics}\end{array}$};&
+&
+\node [DataInter,stack] (ms_am-motor_analy) {$\begin{array}{c}\text{Segment torque} \\ \text{Segment RPM}\end{array}$};&
+\node [DataInter,stack] (ms_am-batt_analy) {$\text{Segment time}$};&
+\\
+%Row 5
+&
+&
+&
+&
+&
+&
+\node [Group] (dummy3) {$\text{....}$};&
+&
+&
+\\
+%Row 6
+&
+&
+&
+&
+&
+&
+&
 \node [ImplicitFunction,stack] (motor_analy) {$\begin{array}{c}\text{Motor} \\ \text{Analysis}\end{array}$};&
 \node [DataInter,stack] (motor_analy-batt_analy) {$\text{Power}$};&
 \\
-%Row 3
-\node [DataIO] (left_output_batt_analy) {$\begin{array}{c}\text{SoC} \\ \text{Battery weight}\end{array}$};&
+%Row 7
+\node [DataIO] (left_output_batt_analy) {$\text{SoC}$};&
+&
+&
+&
+&
+&
 &
 \node [DataInter] (batt_analy-motor_analy) {$\text{Voltage}$};&
 \node [ImplicitFunction] (batt_analy) {$\begin{array}{c}\text{Battery} \\ \text{Analysis}\end{array}$};&
 \\
-%Row 4
+%Row 8
+&
+&
+&
+&
+&
+&
+&
+&
+&
+\node [Group] (dummy4) {$\text{....}$};\\
+%Row 9
+&
+&
+&
+&
+&
 &
 &
 &
@@ -55,18 +135,20 @@
 \begin{pgfonlayer}{data}
 \path
 % Horizontal edges
-(motor_sizing) edge [DataLine] (motor_sizing-motor_analy)
+(sizing) edge [DataLine] (sizing-motor_analy)
+(sizing) edge [DataLine] (sizing-batt_analy)
+(ms_am) edge [DataLine] (ms_am-motor_analy)
+(ms_am) edge [DataLine] (ms_am-batt_analy)
 (motor_analy) edge [DataLine] (motor_analy-batt_analy)
 (batt_analy) edge [DataLine] (batt_analy-motor_analy)
 (batt_analy) edge [DataLine] (left_output_batt_analy)
-(motor_sizing) edge [DataLine] (left_output_motor_sizing)
 % Vertical edges
-(motor_sizing-motor_analy) edge [DataLine] (motor_analy)
+(sizing-motor_analy) edge [DataLine] (motor_analy)
+(sizing-batt_analy) edge [DataLine] (batt_analy)
+(ms_am-motor_analy) edge [DataLine] (motor_analy)
+(ms_am-batt_analy) edge [DataLine] (batt_analy)
 (motor_analy-batt_analy) edge [DataLine] (batt_analy)
-(batt_analy-motor_analy) edge [DataLine] (motor_analy)
-(motor_sizing) edge [DataLine] (output_motor_sizing)
-(motor_analy) edge [DataLine] (output_motor_analy)
-(batt_analy) edge [DataLine] (output_batt_analy);
+(batt_analy-motor_analy) edge [DataLine] (motor_analy);
 \end{pgfonlayer}
 
 \end{tikzpicture}

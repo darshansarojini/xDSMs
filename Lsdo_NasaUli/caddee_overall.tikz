@@ -28,20 +28,20 @@
 &
 \node [ImplicitFunction] (geom) {$\text{Geometry Update}$};&
 \node [DataInter] (geom-weight) {$\text{Actuated geometry}$};&
-\node [DataInter] (geom-aeromech) {$\text{Actuated geometry}$};&
+\node [DataInter,stack] (geom-aeromech) {$\text{Actuated geometry}$};&
 &
 \\
 %Row 2
 \node [DataInter] (weight-opt) {$\text{c: Structural margins}$};&
 &
-\node [SubOptimization] (weight) {$\text{Structural Weight Estimation}$};&
+\node [SubOptimization] (weight) {$\begin{array}{c}\text{Aircraft Mass} \\ \text{Properties Estimation}\end{array}$};&
 \node [DataInter] (weight-aeromech) {$\text{Mass properties}$};&
 &
 \node [DataInter] (weight-cost_analy) {$\text{Weight}$};\\
 %Row 3
 \node [DataInter,stack] (aeromech-opt) {$\begin{array}{c}\text{c: EoM residuals} \\ \text{c: Handling qualities} \\ \text{c: Noise maps}\end{array}$};&
 &
-\node [DataInter] (aeromech-weight) {$\text{Critical load cases}$};&
+\node [DataInter,stack] (aeromech-weight) {$\text{Loads}$};&
 \node [ImplicitGroup,stack] (aeromech) {$\text{Mission Segment Aeromechanics}$};&
 \node [DataInter,stack] (aeromech-energy_analy) {$\begin{array}{c}\text{Torque} \\ \text{Thrust} \\ \text{Time}\end{array}$};&
 \\
