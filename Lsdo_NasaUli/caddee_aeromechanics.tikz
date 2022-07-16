@@ -19,7 +19,7 @@
 \matrix[MatrixSetup]{
 %Row 0
 &
-\node [Optimization] (opt) {$\text{Opimizer}$};&
+\node [Optimization] (opt) {$\text{Optimizer}$};&
 &
 &
 \node [DataInter] (opt-aero) {$\begin{array}{c}\Vec{x}, \Vec{u} \\ \text{Geometry DVs}\end{array}$};&

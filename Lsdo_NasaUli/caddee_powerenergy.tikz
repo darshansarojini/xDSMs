@@ -31,7 +31,7 @@
 %Row 1
 &
 &
-\node [Group] (dummy4) {$\text{....}$};&
+\node [Group] (dummy1) {$\text{....}$};&
 &
 &
 &
