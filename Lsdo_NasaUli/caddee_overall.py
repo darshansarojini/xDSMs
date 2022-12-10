@@ -16,10 +16,10 @@ from pyxdsm.XDSM import (
 x = XDSM()
 
 x.add_system("opt", OPT, r"\text{Optimizer}")
-x.add_system("geom", IFUNC, r"\text{Geometry Update}")
+x.add_system("geom", IFUNC, r"\text{Geometry}")
 x.add_system("weight", SUBOPT, (r"\text{Aircraft Mass}", r"\text{Properties Estimation}"))
-x.add_system("aeromech", IGROUP, r"\text{Mission Segment Aeromechanics}", stack=True)
-x.add_system("energy_analy", IFUNC, r"\text{Power and Energy Analysis}")
+x.add_system("aeromech", IGROUP, (r"\text{Mission Segment}", r"\text{Aeromechanics}"), stack=True)
+x.add_system("energy_analy", IFUNC, (r"\text{Powertrain and}", r"\text{Energy Analysis}"))
 x.add_system("cost_analy", IFUNC, r"\text{Cost Analysis}")
 
 x.connect("opt", "geom", (r'\text{Geometric DVs}', r'\text{Motion DVs}'))
@@ -43,6 +43,6 @@ x.connect("aeromech", "opt", (r'\text{c: EoM residuals}',
 x.connect("energy_analy", "opt", r'\text{c: State of charge}')
 x.connect("energy_analy", "cost_analy", r'\text{Energy usage}')
 
-x.connect("cost_analy", "opt", r'\text{f: Direct operating cost}')
+x.connect("cost_analy", "opt", r'\text{f: Cost}')
 
 x.write("caddee_overall", cleanup=False)

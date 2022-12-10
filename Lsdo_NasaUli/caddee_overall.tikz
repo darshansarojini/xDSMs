@@ -13,7 +13,7 @@
 
 %%% End Preamble Requirements %%%
 
-\input{"C:/Users/Darshan/anaconda3/envs/xdsm/lib/site-packages/pyxdsm/diagram_styles"}
+\input{"C:/Users/darsh/anaconda3/envs/DaeSystemsSolver/lib/site-packages/pyxdsm/diagram_styles"}
 \begin{tikzpicture}
 
 \matrix[MatrixSetup]{
@@ -26,7 +26,7 @@
 \\
 %Row 1
 &
-\node [ImplicitFunction] (geom) {$\text{Geometry Update}$};&
+\node [ImplicitFunction] (geom) {$\text{Geometry}$};&
 \node [DataInter] (geom-weight) {$\text{Actuated geometry}$};&
 \node [DataInter,stack] (geom-aeromech) {$\text{Actuated geometry}$};&
 &
@@ -42,7 +42,7 @@
 \node [DataInter,stack] (aeromech-opt) {$\begin{array}{c}\text{c: EoM residuals} \\ \text{c: Handling qualities} \\ \text{c: Noise maps}\end{array}$};&
 &
 \node [DataInter,stack] (aeromech-weight) {$\text{Loads}$};&
-\node [ImplicitGroup,stack] (aeromech) {$\text{Mission Segment Aeromechanics}$};&
+\node [ImplicitGroup,stack] (aeromech) {$\begin{array}{c}\text{Mission Segment} \\ \text{Aeromechanics}\end{array}$};&
 \node [DataInter,stack] (aeromech-energy_analy) {$\begin{array}{c}\text{Torque} \\ \text{Thrust} \\ \text{Time}\end{array}$};&
 \\
 %Row 4
@@ -50,10 +50,10 @@
 &
 &
 &
-\node [ImplicitFunction] (energy_analy) {$\text{Power and Energy Analysis}$};&
+\node [ImplicitFunction] (energy_analy) {$\begin{array}{c}\text{Powertrain and} \\ \text{Energy Analysis}\end{array}$};&
 \node [DataInter] (energy_analy-cost_analy) {$\text{Energy usage}$};\\
 %Row 5
-\node [DataInter] (cost_analy-opt) {$\text{f: Direct operating cost}$};&
+\node [DataInter] (cost_analy-opt) {$\text{f: Cost}$};&
 &
 &
 &
