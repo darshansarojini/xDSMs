@@ -1,0 +1,165 @@
+
+%%% Preamble Requirements %%%
+% \usepackage{geometry}
+% \usepackage{amsfonts}
+% \usepackage{amsmath}
+% \usepackage{amssymb}
+% \usepackage{tikz}
+
+% Optional packages such as sfmath set through python interface
+% \usepackage{sfmath}
+
+% \usetikzlibrary{arrows,chains,positioning,scopes,shapes.geometric,shapes.misc,shadows}
+
+%%% End Preamble Requirements %%%
+
+\input{"C:/Users/Darshan/anaconda3/envs/xdsm/lib/site-packages/pyxdsm/diagram_styles"}
+\begin{tikzpicture}
+
+\matrix[MatrixSetup]{
+%Row 0
+&
+\node [Optimization] (opt) {$\text{Optimizer}$};&
+&
+\node [DataInter] (opt-struc_wt) {$\begin{array}{c}\text{Thicknesses} \\ \text{Material}\end{array}$};&
+\node [DataInter] (opt-bat_wt) {$\text{Number of cells}$};&
+\node [DataInter] (opt-motor_wt) {$\begin{array}{c}\text{Rated speed} \\ \text{Rated power}\end{array}$};&
+&
+&
+&
+\\
+%Row 1
+&
+&
+\node [Group] (dummy1) {$\text{....}$};&
+&
+&
+&
+&
+&
+&
+\\
+%Row 2
+&
+&
+&
+\node [ImplicitGroup] (struc_wt) {$\begin{array}{c}\text{Structural} \\ \text{Weight Estimation}\end{array}$};&
+&
+&
+\node [DataInter] (struc_wt-acmp) {$MP_{struc}$};&
+&
+&
+\\
+%Row 3
+&
+&
+&
+&
+\node [MDA] (bat_wt) {$\begin{array}{c}\text{Battery} \\ \text{Sizing}\end{array}$};&
+&
+\node [DataInter] (bat_wt-acmp) {$MP_{battery}$};&
+&
+\node [DataInter] (bat_wt-powerenergy) {$\text{Battery}$};&
+\\
+%Row 4
+\node [DataIO] (left_output_motor_wt) {$\begin{array}{c}\text{c: Motor L, D} \\ m=1,\ldots, M\end{array}$};&
+&
+&
+&
+&
+\node [MDA] (motor_wt) {$\begin{array}{c}\text{Motor Sizing} \\ m=1,\ldots, M\end{array}$};&
+\node [DataInter] (motor_wt-acmp) {$\begin{array}{c}MP_{motor} \\ m=1,\ldots, M\end{array}$};&
+\node [DataInter] (motor_wt-aeromech) {$\begin{array}{c}\text{Max T, Q} \\ m=1,\ldots, M\end{array}$};&
+\node [DataInter] (motor_wt-powerenergy) {$\begin{array}{c}\text{Motor} \\ m=1,\ldots, M\end{array}$};&
+\\
+%Row 5
+\node [DataIO] (left_output_acmp) {$MP_{AC}$};&
+&
+&
+&
+&
+&
+\node [ImplicitFunction] (acmp) {$\begin{array}{c}\text{Aircraft MP} \\ \text{Computation}\end{array}$};&
+\node [DataInter] (acmp-aeromech) {$MP_{AC}$};&
+&
+\\
+%Row 6
+&
+&
+&
+\node [DataInter,stack] (aeromech-struc_wt) {$\text{Loads}$};&
+&
+&
+&
+\node [ImplicitGroup,stack] (aeromech) {$\begin{array}{c}\text{Mission Segment} \\ \text{Aeromechanics}\end{array}$};&
+&
+\\
+%Row 7
+&
+&
+&
+&
+&
+&
+&
+&
+\node [ImplicitGroup] (powerenergy) {$\begin{array}{c}\text{Power and} \\ \text{Energy Analysis}\end{array}$};&
+\\
+%Row 8
+&
+&
+&
+&
+&
+&
+&
+&
+&
+\node [Group] (dummy2) {$\text{....}$};\\
+%Row 9
+&
+&
+&
+&
+&
+&
+&
+&
+&
+\\
+};
+
+% XDSM process chains
+
+
+\begin{pgfonlayer}{data}
+\path
+% Horizontal edges
+(opt) edge [DataLine] (opt-motor_wt)
+(opt) edge [DataLine] (opt-bat_wt)
+(opt) edge [DataLine] (opt-struc_wt)
+(struc_wt) edge [DataLine] (struc_wt-acmp)
+(bat_wt) edge [DataLine] (bat_wt-acmp)
+(motor_wt) edge [DataLine] (motor_wt-acmp)
+(motor_wt) edge [DataLine] (motor_wt-aeromech)
+(aeromech) edge [DataLine] (aeromech-struc_wt)
+(acmp) edge [DataLine] (acmp-aeromech)
+(bat_wt) edge [DataLine] (bat_wt-powerenergy)
+(motor_wt) edge [DataLine] (motor_wt-powerenergy)
+(acmp) edge [DataLine] (left_output_acmp)
+(motor_wt) edge [DataLine] (left_output_motor_wt)
+% Vertical edges
+(opt-motor_wt) edge [DataLine] (motor_wt)
+(opt-bat_wt) edge [DataLine] (bat_wt)
+(opt-struc_wt) edge [DataLine] (struc_wt)
+(struc_wt-acmp) edge [DataLine] (acmp)
+(bat_wt-acmp) edge [DataLine] (acmp)
+(motor_wt-acmp) edge [DataLine] (acmp)
+(motor_wt-aeromech) edge [DataLine] (aeromech)
+(aeromech-struc_wt) edge [DataLine] (struc_wt)
+(acmp-aeromech) edge [DataLine] (aeromech)
+(bat_wt-powerenergy) edge [DataLine] (powerenergy)
+(motor_wt-powerenergy) edge [DataLine] (powerenergy);
+\end{pgfonlayer}
+
+\end{tikzpicture}

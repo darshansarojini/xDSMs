@@ -1,0 +1,154 @@
+
+%%% Preamble Requirements %%%
+% \usepackage{geometry}
+% \usepackage{amsfonts}
+% \usepackage{amsmath}
+% \usepackage{amssymb}
+% \usepackage{tikz}
+
+% Optional packages such as sfmath set through python interface
+% \usepackage{sfmath}
+
+% \usetikzlibrary{arrows,chains,positioning,scopes,shapes.geometric,shapes.misc,shadows}
+
+%%% End Preamble Requirements %%%
+
+\input{"C:/Users/Darshan/anaconda3/envs/xdsm/lib/site-packages/pyxdsm/diagram_styles"}
+\begin{tikzpicture}
+
+\matrix[MatrixSetup]{
+%Row 0
+&
+\node [Optimization] (opt) {$\text{Optimizer}$};&
+&
+&
+&
+&
+&
+&
+&
+\\
+%Row 1
+&
+&
+\node [Group] (dummy1) {$\text{....}$};&
+&
+&
+&
+&
+&
+&
+\\
+%Row 2
+&
+&
+&
+\node [Group] (sizing) {$\text{Sizing}$};&
+&
+&
+&
+\node [DataInter] (sizing-motor_analy) {$\begin{array}{c}\text{Motor length} \\ \text{Motor diameter}\end{array}$};&
+\node [DataInter] (sizing-batt_analy) {$\text{Battery}$};&
+\\
+%Row 3
+&
+&
+&
+&
+\node [Group] (dummy2) {$\text{....}$};&
+&
+&
+&
+&
+\\
+%Row 4
+&
+&
+&
+&
+&
+\node [ImplicitGroup,stack] (ms_am) {$\begin{array}{c}\text{Mission Segment} \\ \text{ Aeromechanics}\end{array}$};&
+&
+\node [DataInter,stack] (ms_am-motor_analy) {$\begin{array}{c}\text{Segment torque} \\ \text{Segment RPM}\end{array}$};&
+\node [DataInter,stack] (ms_am-batt_analy) {$\text{Segment time}$};&
+\\
+%Row 5
+&
+&
+&
+&
+&
+&
+\node [Group] (dummy3) {$\text{....}$};&
+&
+&
+\\
+%Row 6
+&
+&
+&
+&
+&
+&
+&
+\node [ImplicitFunction,stack] (motor_analy) {$\begin{array}{c}\text{Motor} \\ \text{Analysis}\end{array}$};&
+\node [DataInter,stack] (motor_analy-batt_analy) {$\text{Power}$};&
+\\
+%Row 7
+\node [DataIO] (left_output_batt_analy) {$\text{SoC}$};&
+&
+&
+&
+&
+&
+&
+\node [DataInter] (batt_analy-motor_analy) {$\text{Voltage}$};&
+\node [ImplicitFunction] (batt_analy) {$\begin{array}{c}\text{Battery} \\ \text{Analysis}\end{array}$};&
+\\
+%Row 8
+&
+&
+&
+&
+&
+&
+&
+&
+&
+\node [Group] (dummy4) {$\text{....}$};\\
+%Row 9
+&
+&
+&
+&
+&
+&
+&
+&
+&
+\\
+};
+
+% XDSM process chains
+
+
+\begin{pgfonlayer}{data}
+\path
+% Horizontal edges
+(sizing) edge [DataLine] (sizing-motor_analy)
+(sizing) edge [DataLine] (sizing-batt_analy)
+(ms_am) edge [DataLine] (ms_am-motor_analy)
+(ms_am) edge [DataLine] (ms_am-batt_analy)
+(motor_analy) edge [DataLine] (motor_analy-batt_analy)
+(batt_analy) edge [DataLine] (batt_analy-motor_analy)
+(batt_analy) edge [DataLine] (left_output_batt_analy)
+% Vertical edges
+(sizing-motor_analy) edge [DataLine] (motor_analy)
+(sizing-batt_analy) edge [DataLine] (batt_analy)
+(ms_am-motor_analy) edge [DataLine] (motor_analy)
+(ms_am-batt_analy) edge [DataLine] (batt_analy)
+(motor_analy-batt_analy) edge [DataLine] (batt_analy)
+(batt_analy-motor_analy) edge [DataLine] (motor_analy);
+\end{pgfonlayer}
+
+\end{tikzpicture}

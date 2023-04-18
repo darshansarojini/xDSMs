@@ -1,0 +1,135 @@
+
+%%% Preamble Requirements %%%
+% \usepackage{geometry}
+% \usepackage{amsfonts}
+% \usepackage{amsmath}
+% \usepackage{amssymb}
+% \usepackage{tikz}
+
+% Optional packages such as sfmath set through python interface
+% \usepackage{sfmath}
+
+% \usetikzlibrary{arrows,chains,positioning,scopes,shapes.geometric,shapes.misc,shadows}
+
+%%% End Preamble Requirements %%%
+
+\input{"C:/Users/darsh/anaconda3/envs/DaeSystemsSolver/lib/site-packages/pyxdsm/diagram_styles"}
+\begin{tikzpicture}
+
+\matrix[MatrixSetup]{
+%Row 0
+&
+&
+&
+\node [DataIO] (output_constr_analy) {$\begin{array}{c}M \\ s_{TOFL}, s_{LFL} \\ C_{L_{max,TO}}, C_{L_{max,L}}\end{array}$};&
+\node [DataIO] (output_miss_analy) {$\begin{array}{c}M, R \\ n_{pax}, m_{cargo} \\ d_{F_o}, BPR\end{array}$};&
+&
+&
+\\
+%Row 1
+&
+\node [Optimization] (opt) {$\text{Optimizer}$};&
+\node [DataInter] (opt-cr_aero) {$AR_{eff}, \Lambda_{25}, \lambda_{eff}$};&
+\node [DataInter] (opt-constr_analy) {$\begin{array}{c}AR_{eff}, \Lambda_{25}, \lambda_{eff} \\ V/V_{md}\end{array}$};&
+\node [DataInter] (opt-miss_analy) {$AR_{eff}, \Lambda_{25}, \lambda_{eff}$};&
+&
+\node [DataInter] (opt-fueltank) {$AR_{eff}, t/c, \lambda_{eff}$};&
+\\
+%Row 2
+&
+\node [DataInter] (cr_aero-opt) {$f: V_{cr}>V_{stall}$};&
+\node [Function] (cr_aero) {$\begin{array}{c}\text{Cruise} \\ \text{Aerodynamics}\end{array}$};&
+\node [DataInter] (cr_aero-constr_analy) {$\left( L/D \right)_{max}$};&
+\node [DataInter] (cr_aero-miss_analy) {$\left( L/D \right)_{max}$};&
+&
+&
+\\
+%Row 3
+&
+&
+&
+\node [Function] (constr_analy) {$\begin{array}{c}\text{Constraint} \\ \text{Analysis}\end{array}$};&
+&
+\node [DataInter] (constr_analy-ac_param) {$T_{TO}/W_{TO}, W_{TO}/S_W$};&
+&
+\\
+%Row 4
+\node [DataIO] (left_output_miss_analy) {$W_{TO}$};&
+\node [DataInter] (miss_analy-opt) {$\begin{array}{c}f: W_{TO} \\ c: L_{cr} > W_{TO} \\ c: m_L > m_{ZFW} + m_{F_{res}}\end{array}$};&
+&
+&
+\node [Function] (miss_analy) {$\begin{array}{c}\text{Mission} \\ \text{Analysis}\end{array}$};&
+\node [DataInter] (miss_analy-ac_param) {$W_{TO}$};&
+\node [DataInter] (miss_analy-fueltank) {$m_F$};&
+\\
+%Row 5
+\node [DataIO] (left_output_ac_param) {$\begin{array}{c}T_{TO} \\ S_{W}\end{array}$};&
+&
+\node [DataInter] (ac_param-cr_aero) {$S_W$};&
+&
+&
+\node [Function] (ac_param) {$\begin{array}{c}\text{Aircraft} \\ \text{Parameters}\end{array}$};&
+\node [DataInter] (ac_param-fueltank) {$S_W$};&
+\\
+%Row 6
+&
+\node [DataInter] (fueltank-opt) {$c: V_T>V_F$};&
+&
+&
+&
+&
+\node [Function] (fueltank) {$\begin{array}{c}\text{Fuel Tank} \\ \text{Volume}\end{array}$};&
+\\
+%Row 7
+&
+&
+&
+&
+&
+&
+&
+\\
+};
+
+% XDSM process chains
+
+
+\begin{pgfonlayer}{data}
+\path
+% Horizontal edges
+(opt) edge [DataLine] (opt-cr_aero)
+(opt) edge [DataLine] (opt-constr_analy)
+(opt) edge [DataLine] (opt-miss_analy)
+(opt) edge [DataLine] (opt-fueltank)
+(cr_aero) edge [DataLine] (cr_aero-constr_analy)
+(cr_aero) edge [DataLine] (cr_aero-miss_analy)
+(constr_analy) edge [DataLine] (constr_analy-ac_param)
+(miss_analy) edge [DataLine] (miss_analy-ac_param)
+(miss_analy) edge [DataLine] (miss_analy-fueltank)
+(ac_param) edge [DataLine] (ac_param-fueltank)
+(ac_param) edge [DataLine] (ac_param-cr_aero)
+(miss_analy) edge [DataLine] (miss_analy-opt)
+(cr_aero) edge [DataLine] (cr_aero-opt)
+(fueltank) edge [DataLine] (fueltank-opt)
+(miss_analy) edge [DataLine] (left_output_miss_analy)
+(ac_param) edge [DataLine] (left_output_ac_param)
+% Vertical edges
+(opt-cr_aero) edge [DataLine] (cr_aero)
+(opt-constr_analy) edge [DataLine] (constr_analy)
+(opt-miss_analy) edge [DataLine] (miss_analy)
+(opt-fueltank) edge [DataLine] (fueltank)
+(cr_aero-constr_analy) edge [DataLine] (constr_analy)
+(cr_aero-miss_analy) edge [DataLine] (miss_analy)
+(constr_analy-ac_param) edge [DataLine] (ac_param)
+(miss_analy-ac_param) edge [DataLine] (ac_param)
+(miss_analy-fueltank) edge [DataLine] (fueltank)
+(ac_param-fueltank) edge [DataLine] (fueltank)
+(ac_param-cr_aero) edge [DataLine] (cr_aero)
+(miss_analy-opt) edge [DataLine] (opt)
+(cr_aero-opt) edge [DataLine] (opt)
+(fueltank-opt) edge [DataLine] (opt)
+(constr_analy) edge [DataLine] (output_constr_analy)
+(miss_analy) edge [DataLine] (output_miss_analy);
+\end{pgfonlayer}
+
+\end{tikzpicture}
